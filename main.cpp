@@ -457,12 +457,17 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR pCmdLine, int nCmdShow
                 // Initialisation du système de journalisation
                 logger = spdlog::rotating_logger_mt("basic_logger",
                                                     getDocumentsPath() +
-                                                    "csv2list_log.txt", 1048576 * 5, 3);
+                                                    "csv2listes_log.txt", 1048576 * 5, 3);
 
                 // Configuration du niveau et du format du journal
                 logger->set_level(spdlog::level::debug);
                 logger->set_pattern("%d/%m/%Y %H:%M:%F %z\t%^%-l%$\t%P\t%t\t%v");
                 spdlog::flush_every(std::chrono::seconds(3));
+
+                logger->info("MAX_SIZE_LINE : {}", MAX_SIZE_LINE);
+                logger->info("MAX_SIZE_FILE : {}", MAX_SIZE_FILE);
+                logger->info("MIN_LINE_COUNT : {}", MIN_LINE_COUNT);
+                logger->info("MAX_LINE_COUNT : {}", MAX_LINE_COUNT);
 
             } else {
                 logger = spdlog::null_logger_mt("null_logger");
