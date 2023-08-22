@@ -43,6 +43,6 @@ file(COPY ${source_dir} DESTINATION ${destination_dir})
 
 # Lie l'exécutable aux bibliothèques spécifiées
 target_link_libraries(csv2listes_app comctl32.lib Version.lib spdlog::spdlog)
-
+target_link_options(csv2listes_app PRIVATE "/MAP")
 # Ajoute un sous-répertoire contenant un autre fichier CMakeLists.txt pour les tests
 add_subdirectory(tests)
