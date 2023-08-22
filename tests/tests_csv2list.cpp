@@ -43,8 +43,8 @@ TEST_CASE("Python") {
         std::string output = transformToPEP8(input);
         REQUIRE_FALSE(output == input);
     }SECTION("To Python Var") {
-        std::vector<std::string> words = {"bonjour", "0hello", "bonjour", "welc0me", "b@nzai", "twOtwo"};
-        std::vector<std::string> variables = {"bonjour", "_0hello", "bonjour_1", "welc0me", "b_nzai", "twOtwo"};
+        std::vector<std::string> words = {"bonjour", "0hello", "bonjour", "welc0me", "b@nzai", "twOtwo","hello(r)"};
+        std::vector<std::string> variables = {"bonjour", "_0hello", "bonjour_1", "welc0me", "b_nzai", "twOtwo","hello_r_"};
         transformToPythonVar(words);
         REQUIRE(words == variables);
     }SECTION("Valid Python Number") {
@@ -105,6 +105,22 @@ TEST_CASE("Extract tokens", "[CSV]") {
         std::string output = replaceAllChars(input, oldCharacter, newCharacter);
         REQUIRE(output == "9;0.297;0.703;0.146");
     }
+}
+
+TEST_CASE("String"){
+    SECTION("Trim ' bonjour'"){
+        std::string chaine = " bonjour";
+        REQUIRE(trim(chaine)=="bonjour");
+    }
+    SECTION("Trim ' bonjour '"){
+        std::string chaine = " bonjour ";
+        REQUIRE(trim(chaine)=="bonjour");
+    }
+    SECTION("Trim 'bonjour '"){
+        std::string chaine = "bonjour ";
+        REQUIRE(trim(chaine)=="bonjour");
+    }
+
 }
 
 TEST_CASE("Load in memory", "[memory]") {

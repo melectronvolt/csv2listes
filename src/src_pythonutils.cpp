@@ -25,56 +25,39 @@ std::string transformToPEP8(const std::string& input) {
     unsigned int nbr_decoupage = 0;
     logger->info("transformToPEP8 called");
     logger->debug("input : {}", input);
-    // Si la taille de la chaîne d'entrée est inférieure ou égale à 79 caractères
     if (input.size() <= 79) {
-        // Retourne la chaîne d'entrée telle quelle
         return input;
     }
 
-    // Initialise une chaîne vide pour le résultat
     std::string result;
-    // Trouve la première occurrence du caractère '[' dans la chaîne d'entrée
     size_t start = input.find('[');
-    // Trouve la première occurrence du caractère ']' dans la chaîne d'entrée
     size_t end = input.find(']');
 
-    // Si les caractères '[' et ']' sont présents dans la chaîne d'entrée
     if (start != std::string::npos && end != std::string::npos) {
-        // Extrait la partie de la chaîne avant '[' et ajoute un saut de ligne avec une indentation de 4 espaces
-        result = input.substr(0, start + 1) + "\n    ";
-        nbr_decoupage += 1;
-        // Extrait le contenu entre les caractères '[' et ']'
+        // Note: We are no longer adding a newline immediately after the '['
+        result = input.substr(0, start + 1);
         std::string listContent = input.substr(start + 1, end - start - 1);
 
-        // Utilise un flux de chaînes pour parcourir le contenu de la liste
         std::stringstream ss(listContent);
         std::string item;
-        // Tant qu'il y a des éléments dans la liste, séparés par des virgules
         while (std::getline(ss, item, ',')) {
-            // Si l'ajout de l'élément courant à la chaîne résultante dépasse 79 caractères pour la ligne en cours
-            if (result.size() - result.rfind('\n') + item.size() > 79) {
-                // Ajoute un nouveau saut de ligne avec une indentation de 4 espaces
+            // Add a newline if adding the current item would exceed 79 characters for the current line
+            if (result.size() - result.rfind('\n') + item.size() + 1 > 79) { // +1 for comma
                 result += "\n    ";
                 nbr_decoupage += 1;
             }
-            // Ajoute l'élément courant suivi d'une virgule à la chaîne résultante
             result += item + ",";
         }
-        // Supprime la dernière virgule ajoutée
-        result.pop_back();
-        // Ajoute le reste de la chaîne d'entrée après le caractère ']'
+        result.pop_back();  // Remove the trailing comma
         result += input.substr(end);
     } else {
-        // Si '[' et ']' ne sont pas présents, la chaîne d'entrée est retournée telle quelle
         result = input;
     }
 
     logger->debug("Nombre de découpages : {}", nbr_decoupage);
     logger->debug("output : {}", result);
-    // Retourne la chaîne transformée
     return result;
 }
-
 
 // Transforme chaque élément d'un vecteur de chaînes en une variable Python valide
 void transformToPythonVar(std::vector<std::string>& vec) {

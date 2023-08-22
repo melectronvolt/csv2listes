@@ -11,11 +11,22 @@
 #include <string>
 #include <windows.h>
 #include <iostream>
-
+#include <algorithm>
+#include <cctype>
 #include <complex>
 #include <unordered_set>
-
 #include "spdlog/spdlog.h"
+
+std::string trim(const std::string &s) {
+    auto wsfront = std::find_if_not(s.begin(), s.end(), [](int c) {
+        return std::isspace(c);
+    });
+    auto wsback = std::find_if_not(s.rbegin(), s.rend(), [](int c) {
+        return std::isspace(c);
+    }).base();
+    return (wsback <= wsfront ? std::string() : std::string(wsfront, wsback));
+}
+
 
 // Fonction pour convertir une std::string (UTF-8) en std::wstring (UTF-16)
 std::wstring string_to_wstring(const std::string& str) {

@@ -15,16 +15,16 @@
 
 extern std::stringstream memStreamFile;
 extern std::string separateur;
+extern unsigned int nbLigneEntete;
+extern unsigned int nbLigneDonnees;
 extern std::wstring filenameCSV;
 extern std::shared_ptr<spdlog::logger> logger;
-
 extern unsigned int nbColonnes;
 extern bool hasHeader;
 extern std::vector<std::string> nomsColonnes;
 extern std::vector<std::vector<std::string>> donnees;
 extern std::stringstream sortie;
 extern std::wstringstream wsortie;
-
 extern unsigned int memStreamLine;
 
 bool checkMaxSizeLine();
@@ -46,9 +46,6 @@ bool readNextLineMemStream(std::string& line);
 double getLineCount();
 
 std::string getOneLine(int LineNumber);
-
-
-
 
 bool isFileText(const std::wstring& filename);
 

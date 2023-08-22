@@ -590,6 +590,8 @@ void ExtractData() {
                                 bool donneesTrouvees = false;
                                 bool headerTrouves = false;
                                 std::string ligne = "";
+                                nbLigneDonnees = 0;
+                                nbLigneEntete = 0 ;
                                 sortie.str("");
                                 sortie.clear();
                                 wsortie.str(L"");
@@ -619,6 +621,8 @@ void ExtractData() {
                                                 case IDYES:
                                                     // Si l'utilisateur confirme que c'est une ligne d'en-tête
                                                     headerTrouves = true;
+                                                    nbLigneEntete = memStreamLine;
+                                                    logger->debug("Entêtes selectionnés pour la ligne {}", nbLigneEntete);
                                                     // Séparer la ligne pour obtenir les noms des colonnes
                                                     nomsColonnes = split(ligne, separateur);
                                                     // Vérifier si le nombre de colonnes correspond à ce qui est attendu
@@ -638,7 +642,7 @@ void ExtractData() {
                                                                 std::to_string(nbColonnes);
                                                         logger->error("Erreur : " + message_erreur_ansi);
                                                         ShowError(message_erreur);
-                                                    }
+                                                    } else transformToPythonVar(nomsColonnes);
                                                     break;
 
                                                 case IDCANCEL:
@@ -686,6 +690,8 @@ void ExtractData() {
                                             switch (ShowQuestion(message)) {
                                                 case IDYES:
                                                     donneesTrouvees = true;
+                                                    nbLigneDonnees = memStreamLine;
+                                                    logger->debug("Première ligne de données sélectionnée pour la ligne {}", nbLigneDonnees);
                                                     donneesAAjouter.clear();
                                                     // Découper la ligne en utilisant le délimiteur spécifié
                                                     donneesAAjouter = split(ligne, separateur);
@@ -989,7 +995,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
                 if (MessageBox(hwnd, L"Souhaiter-vous ouvrir sciences-physiques.net ?", L"Plus d'informations",
                                MB_YESNO | MB_ICONQUESTION) == IDYES) {
                     // Si l'utilisateur répond "Oui", ouvre le site web
-                    ShellExecute(NULL, L"open", L"https://sciences-physiques.net", NULL, NULL, SW_SHOWNORMAL);
+                    ShellExecute(NULL, L"open", L"https://sciences-physiques.net/softwares/csv2listes", NULL, NULL, SW_SHOWNORMAL);
                     logger->debug("Ouverture du site https://sciences-physiques.net.");
                 }
                 return 0;  // Interrompt le traitement du message

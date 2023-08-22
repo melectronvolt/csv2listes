@@ -27,6 +27,8 @@ std::stringstream sortie;
 std::wstringstream wsortie;
 std::string separateur = ";";
 unsigned int nbColonnes;
+unsigned int nbLigneEntete;
+unsigned int nbLigneDonnees;
 std::shared_ptr<spdlog::logger> logger = spdlog::null_logger_mt("null_logger");
 
 
@@ -65,7 +67,7 @@ bool checkMaxSizeLine() {
         // Si la longueur d'une ligne dépasse MAX_SIZE_LINE
         if (line.length() > MAX_SIZE_LINE) {
             // Retourne faux
-            logger->error("Valeur : False, longueur de la ligne {} / {}", line.length(),MAX_SIZE_LINE);
+            logger->error("Valeur : False, longueur de la ligne {} / {}", line.length(), MAX_SIZE_LINE);
             return false;
         }
     }
@@ -120,9 +122,16 @@ bool readNextLineMemStream(std::string& line) {
 
     // Si la lecture de la ligne suivante du flux en mémoire est réussie
     if (std::getline(memStreamFile, line)) {
+
         // Incrémente le compteur de ligne
         memStreamLine++;
         logger->info("readNextLineMemStream called - Nouvelle ligne lue : {}", memStreamLine);
+
+        if ((nbLigneDonnees != 0) && (trim(line).empty())) {
+            logger->info("Ligne vide -> Arrêt de la lecture à la ligne {}", memStreamLine);
+            return false;
+        }
+
         // Retourne vrai pour indiquer le succès de l'opération
         return true;
     }
