@@ -611,11 +611,11 @@ void ExtractData() {
                                             std::wstring message;
                                             // Poser une question à l'utilisateur pour savoir si la ligne actuelle est une ligne d'en-tête
                                             message = L"Est-ce que la ligne n°" + std::to_wstring(memStreamLine) +
-                                                      L" correspond aux entêtes \n \"" + string_to_wstring(ligne) +
+                                                      L" correspond aux entêtes :\n \"" + string_to_wstring(ligne) +
                                                       L"\"";
                                             std::string message_ansi;
                                             message_ansi = "Est-ce que la ligne n°" + std::to_string(memStreamLine) +
-                                                           " correspond aux entêtes \n \"" + ligne + "\"";
+                                                           " correspond aux entêtes :\n \"" + ligne + "\"";
                                             logger->info("Question : " + message_ansi);
                                             switch (ShowQuestion(message)) {
                                                 case IDYES:
@@ -680,11 +680,11 @@ void ExtractData() {
                                             std::wstring message;
                                             // Poser une question à l'utilisateur pour savoir si la ligne actuelle est la première ligne de données
                                             message = L"Est-ce que la ligne n°" + std::to_wstring(memStreamLine) +
-                                                      L" correspond à la première ligne de données \n \"" +
+                                                      L" correspond à la première ligne de données :\n \"" +
                                                       string_to_wstring(ligne) + L"\"";
                                             std::string message_ansi;
                                             message_ansi = "Est-ce que la ligne n°" + std::to_string(memStreamLine) +
-                                                           " correspond à la première ligne de données \n \"" +
+                                                           " correspond à la première ligne de données :\n \"" +
                                                            ligne + "\"";
                                             logger->info("Question : " + message_ansi);
                                             switch (ShowQuestion(message)) {
