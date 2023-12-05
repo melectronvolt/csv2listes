@@ -19,6 +19,7 @@
 #include <algorithm>
 
 #include "spdlog/spdlog.h"
+#include "src_stringutils.h"
 
 // Transforme une chaîne de caractères en respectant la norme PEP8 pour la longueur des lignes
 std::string transformToPEP8(const std::string& input) {
@@ -104,6 +105,7 @@ void transformThePythonList(std::vector<std::string>& vec) {
     // parcourt chaque chaîne du vecteur
     for (std::string& s: vec) {
         // Si la chaîne n'est pas un nombre Python valide
+        s = replaceAllChars(s, ',', '.');
         if (!isValidPythonNumber(s)) {
             // Entoure la chaîne de guillemets pour la transformer en une chaîne de caractères Python
             s = "\"" + s + "\"";

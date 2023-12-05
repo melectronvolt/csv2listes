@@ -673,7 +673,7 @@ void ExtractData() {
                                     // Tant qu'il reste des lignes dans le flux mémoire et que l'utilisateur n'a pas annulé
                                     while (readNextLineMemStream(ligne) && pasAnnule) {
                                         // Remplacer chaque virgule par un point (pour gérer les délimiteurs décimaux)
-                                        ligne = replaceAllChars(ligne, ',', '.');
+
 
                                         // Si les données n'ont pas encore été trouvées
                                         if (!donneesTrouvees) {

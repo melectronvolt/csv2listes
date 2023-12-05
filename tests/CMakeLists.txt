@@ -1,5 +1,5 @@
 # Ajoute un chemin supplémentaire pour la recherche de packages CMake, spécifiquement pour Catch2
-list(APPEND CMAKE_PREFIX_PATH "P:/Frameworks/Install/Catch2")
+list(APPEND CMAKE_PREFIX_PATH "F:/Frameworks/Catch2/3.4.0")
 
 # Recherche le package Catch2 (version 3)
 find_package(Catch2 3 REQUIRED)
