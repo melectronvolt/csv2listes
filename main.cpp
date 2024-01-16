@@ -814,7 +814,7 @@ void ExtractData() {
                                             message = L"Le programme a copié dans le presse papiers :\n" +
                                                       std::to_wstring(nbColonnes) + L" colonnes de " +
                                                       std::to_wstring(donnees.size()) + L" valeurs. ";
-                                            MessageBox(NULL, message.c_str(), L"Error", MB_OK | MB_ICONINFORMATION);
+                                            MessageBox(NULL, message.c_str(), L"Succès", MB_OK | MB_ICONINFORMATION);
                                         } else {
                                             // Si la copie a échoué, afficher un message d'erreur
                                             logger->error("Impossible de copier les listes dans le presse-papiers.");
