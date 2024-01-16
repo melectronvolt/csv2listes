@@ -91,6 +91,8 @@ TEST_CASE("Clipboard") {
     }
 }
 
+
+
 TEST_CASE("Extract tokens", "[CSV]") {
     SECTION("SIMPLE") {
         std::string input = "9;0,297;0,703;0,146";
@@ -246,7 +248,7 @@ TEST_CASE("Detect Binary_text", "[file]") {
     };
 
     SECTION("Get Documents folder") {
-        std::string documentDir = "C:\\Users\\remi\\OneDrive\\Documents\\";
+        std::string documentDir = "C:\\Users\\remi\\Documents\\";
         REQUIRE(getDocumentsPath() == documentDir);
     }
 

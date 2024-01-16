@@ -5,13 +5,10 @@ cmake_minimum_required(VERSION 3.26)
 project(csv2listes_app)
 
 # Définit la norme C++ utilisée pour ce projet comme étant C++23
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 
 # Ajoute des définitions pour utiliser Unicode
 add_definitions(-DUNICODE -D_UNICODE)
-
-# Inclut le répertoire "include" pour la recherche de fichiers d'en-tête
-include_directories(${PROJECT_SOURCE_DIR}/include)
 
 # Définit les fichiers de ressources du projet
 set(RESOURCE_FILES resources.rc)
@@ -76,8 +73,6 @@ endif ()
 # Ajoute le chemin de base de spdlog à CMAKE_PREFIX_PATH pour faciliter la recherche de paquets.
 list(APPEND CMAKE_PREFIX_PATH "${spdlog_BASE_PATH_find}")
 
-# Ajoute le répertoire d'en-tête de spdlog aux répertoires d'inclusion du projet.
-include_directories("${spdlog_BASE_PATH}/include")
 
 # Recherche le paquet spdlog version 3 et indique qu'il est obligatoire.
 find_package(spdlog REQUIRED)
@@ -91,6 +86,12 @@ add_executable(csv2listes_app WIN32 main.cpp
         src/src_windowsutils.cpp
         src/src_filesutils.cpp
         ${RESOURCE_FILES})
+
+# Inclut le répertoire "include" pour la recherche de fichiers d'en-tête
+target_include_directories(csv2listes_app PRIVATE ${PROJECT_SOURCE_DIR}/include)
+# Ajoute le répertoire d'en-tête de spdlog aux répertoires d'inclusion du projet.
+target_include_directories(csv2listes_app PRIVATE "${spdlog_BASE_PATH}/include")
+
 
 # Copie les fichiers depuis le répertoire source vers le répertoire de destination
 file(COPY ${source_dir} DESTINATION ${destination_dir})
