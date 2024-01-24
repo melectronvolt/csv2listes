@@ -53,7 +53,7 @@ int ShowQuestion(const std::wstring& message) {
     int response = MessageBoxW(NULL,
                                message.c_str(),
                                L"Question",
-                               MB_YESNOCANCEL | MB_ICONQUESTION);
+                               MB_YESNOCANCEL | MB_ICONQUESTION | MB_TASKMODAL);
 
     // Retourne la réponse de l'utilisateur
     logger->debug("Réponse : {}", response);
@@ -69,7 +69,7 @@ int ShowQuestion(const std::wstring& message) {
 void ShowError(const std::wstring& message) {
     // Affiche une boîte de dialogue avec le message d'erreur donné, un titre "Error" et un bouton "OK"
     // L'icône de la boîte de dialogue est celle d'une erreur.
-    MessageBox(NULL, message.c_str(), L"Error", MB_OK | MB_ICONERROR);
+    MessageBox(NULL, message.c_str(), L"Error", MB_OK | MB_ICONERROR | MB_TASKMODAL);
 }
 
 
