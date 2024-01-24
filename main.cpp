@@ -49,7 +49,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
  */
 int ShowQuestion(const std::wstring& message) {
     // Affiche une boîte de dialogue avec le message donné, un titre "Question" et des boutons "Oui", "Non" et "Annuler"
-
+    // Modal
     int response = MessageBoxW(NULL,
                                message.c_str(),
                                L"Question",
