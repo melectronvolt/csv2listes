@@ -72,6 +72,48 @@ void ShowError(const std::wstring& message) {
     MessageBox(NULL, message.c_str(), L"Error", MB_OK | MB_ICONERROR | MB_TASKMODAL);
 }
 
+/**
+ * Récupère La chaîne de caractères LegalCopyright depuis les ressources
+ *
+ * @return Une chaîne de caractères formatée contenant la chaîne LegalCopyright.
+ *         Retourne une chaîne vide si la version ne peut pas être récupérée.
+ */
+
+std::wstring GetLegalCopyright() {
+    // Retrieve the current executable's path
+    wchar_t path[MAX_PATH];
+    GetModuleFileName(NULL, path, MAX_PATH);
+
+    DWORD dummy;
+    // Retrieve the size of the version information for the executable
+    DWORD size = GetFileVersionInfoSize(path, &dummy);
+
+    // If size is 0, it means there are no version information
+    if (size == 0) return L"";
+
+    // Create a vector to store the version data
+    std::vector<BYTE> data(size);
+    // Attempt to retrieve the version information from the executable
+    if (!GetFileVersionInfo(path, 0, size, &data[0])) return L"";
+
+    // Now we need to retrieve the string information for 'LegalCopyright'
+    LPVOID lpBuffer = nullptr;
+    UINT len;
+    // The structure of the resource string to request e.g. "\StringFileInfo\<lang-codepage>\LegalCopyright"
+    // Example: "\StringFileInfo\040904b0\LegalCopyright"
+    // For simplicity, let's assume we are dealing with a "040904B0" lang-codepage, but this should be determined programmatically.
+    // VerQueryValue requires a wide string for the sub-block
+    std::wstring subBlock = L"\\StringFileInfo\\040C04E4\\LegalCopyright";
+    // Attempt to retrieve the 'LegalCopyright' information
+    if (!VerQueryValue(&data[0], subBlock.c_str(), &lpBuffer, &len)) return L"";
+
+    // If the 'LegalCopyright' information was not found, return an empty string
+    if (!lpBuffer || len == 0) return L"";
+
+    // Return the 'LegalCopyright' information as a wstring
+    // Note: This assumes that len includes the null terminator. If it's not the case, then you may need to manually add it.
+    return std::wstring(static_cast<LPCWSTR>(lpBuffer), len - 1); // Subtract 1 from len to exclude the null terminator if present.
+}
 
 /**
  * Récupère la version du produit de l'exécutable courant.
@@ -366,7 +408,7 @@ void CreateStatusBar(HINSTANCE hInstance, HWND hwnd) {
     logger->info("GUI : Création de la barre de statut");
     // Construit le texte à afficher dans la barre de statut.
     // Il contient le copyright, le nom de l'auteur, l'année, ainsi que la version du produit.
-    std::wstring Informations = L"Copyright Rémi MEVAERE - 2023\u00A9 - " + GetProductVersion();
+    std::wstring Informations = GetLegalCopyright() + L" - " + GetProductVersion();
     logger->info("Version du logiciel : " + wstring_to_string(GetProductVersion()));
     // Création de la barre de statut
     CreateWindowEx(
