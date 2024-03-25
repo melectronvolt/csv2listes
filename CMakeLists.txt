@@ -20,10 +20,10 @@ set(source_dir ${CMAKE_CURRENT_SOURCE_DIR}/tests/assets)
 set(destination_dir ${CMAKE_BINARY_DIR}/tests)
 
 
-set(spdlog_BASE_PATH "F:/Frameworks/spdlog/1.12.0")
+set(spdlog_BASE_PATH "O:/Frameworks/spdlog/1.13.0")
 
 # Ajoute un chemin pour la recherche de packages CMake
-list(APPEND CMAKE_PREFIX_PATH "F:/Frameworks/spdlog/1.12.0")
+list(APPEND CMAKE_PREFIX_PATH "O:/Frameworks/spdlog/1.13.0")
 
 # Indique si spdlog est utilisé en tant que DLL (bibliothèque dynamique) ou non.
 SET(USE_DYNAMIC_spdlog OFF)

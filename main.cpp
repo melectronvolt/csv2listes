@@ -698,6 +698,8 @@ void ExtractData() {
                                             // Si la fin du fichier est atteinte sans trouver d'en-tête
                                             logger->error("Erreur : Fin du fichier, aucun entête choisi.");
                                             ShowError(L"Fin du fichier, aucun entête choisi.");
+                                            pasAnnule = false;
+                                            break;
                                         }
                                     }
 
