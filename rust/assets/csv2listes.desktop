@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=csv2listes
+Comment=Convertisseur : fichier CSV -> listes en Python
+Exec=csv2listes
+Icon=csv2listes
+Terminal=false
+Categories=Education;Science;
+StartupWMClass=csv2listes

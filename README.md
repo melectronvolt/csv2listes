@@ -26,6 +26,10 @@
 #define MAX_SIZE_FILE 1000000
 ```
 
+## Version Linux 🐧
+- Un portage en Rust pour Linux se trouve dans le dossier `rust/` : voir [rust/README.md](rust/README.md).
+- Lancement : `cd rust && cargo run --release`
+
 ## Licence 🔓
 [MIT](https://fr.wikipedia.org/wiki/Licence_MIT) : Cette licence autorise quiconque reçoit le logiciel (et ses fichiers associés) à l'utiliser, le copier, le modifier, le fusionner, le publier, le distribuer, le vendre et à le « sous-licencier » (l'intégrer dans une autre licence). La seule obligation est d'inclure la notice de licence et de copyright dans toutes les copies.
 

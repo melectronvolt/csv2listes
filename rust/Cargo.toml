@@ -1,0 +1,18 @@
+[package]
+name = "csv2listes"
+version = "0.0.8"
+edition = "2024"
+authors = ["Rémi MEVAERE"]
+description = "Convertisseur : fichier CSV -> listes en Python"
+license = "MIT"
+homepage = "https://sciences-physiques.net/softwares/csv2listes"
+
+[dependencies]
+chrono = { version = "0.4.45", default-features = false, features = ["clock"] }
+dirs = "7.0.0"
+eframe = "0.36.2"
+log = "0.4.34"
+rfd = "0.17.2"
+
+[profile.release]
+strip = true
