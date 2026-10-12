@@ -5,5 +5,5 @@ Comment=Convertisseur : fichier CSV -> listes en Python
 Exec=csv2listes
 Icon=csv2listes
 Terminal=false
-Categories=Education;Science;
+Categories=Education;Physics;
 StartupWMClass=csv2listes
