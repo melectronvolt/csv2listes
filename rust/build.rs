@@ -1,15 +1,20 @@
-//! Sous Windows, intègre l'icône et les informations de version dans l'exécutable
-//! (équivalent de `resources.rc` de la version C++).
+//! Sous Windows, intègre dans l'exécutable l'icône, les informations de version
+//! et le manifeste (équivalent de `resources.rc` de la version C++).
 
 use std::env;
 
 use winresource::{VersionInfo, WindowsResource};
 
+const ICON: &str = "../app_icon.ico";
+const MANIFEST: &str = "assets/csv2listes.exe.manifest";
+
 fn main() {
-    println!("cargo:rerun-if-changed=../app_icon.ico");
+    println!("cargo:rerun-if-changed={ICON}");
+    println!("cargo:rerun-if-changed={MANIFEST}");
     if env::var("CARGO_CFG_TARGET_OS").as_deref() != Ok("windows") {
         return;
     }
+    let dir = env::var("CARGO_MANIFEST_DIR").unwrap();
 
     // Numérotation à 4 chiffres de la version Windows d'origine : 0.0.9 dans Cargo → 0.0.0.9
     let part = |name: &str| env::var(name).unwrap().parse::<u64>().unwrap();
@@ -20,7 +25,8 @@ fn main() {
 
     let mut resource = WindowsResource::new();
     resource
-        .set_icon("../app_icon.ico")
+        .set_icon(&format!("{dir}/{ICON}"))
+        .set_manifest_file(&format!("{dir}/{MANIFEST}"))
         .set_language(0x040C) // français (France)
         .set_version_info(VersionInfo::FILEVERSION, numeric)
         .set_version_info(VersionInfo::PRODUCTVERSION, numeric)

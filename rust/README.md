@@ -45,7 +45,7 @@ Les tests reprennent ceux de `tests/tests_csv2list.cpp` et utilisent les mêmes 
 sudo dnf install mingw64-gcc rust-std-static-x86_64-pc-windows-gnu
 cargo build --release --target x86_64-pc-windows-gnu
 ```
-L'exécutable `target/x86_64-pc-windows-gnu/release/csv2listes.exe` fonctionne seul (aucune DLL à fournir) sous Windows 10 et 11 64 bits. L'icône et les informations de version y sont intégrées par `build.rs`.
+L'exécutable `target/x86_64-pc-windows-gnu/release/csv2listes.exe` fonctionne seul (aucune DLL à fournir) sous Windows 10 et 11 64 bits. L'icône, les informations de version et le manifeste (`assets/csv2listes.exe.manifest` : thème Windows moderne, affichage net en haute résolution, pas de droits administrateur) y sont intégrés par `build.rs`.
 
 **Linux portable** : un binaire compilé sur une distribution récente exige une glibc récente. Pour qu'il fonctionne aussi sous Ubuntu 22.04, Debian 12 et Fedora 36 ou plus récent, compilez-le dans un conteneur Debian 12 :
 ```bash
