@@ -1,6 +1,6 @@
-# csv2listes pour Linux (Rust) 🐧
+# csv2listes en Rust (Linux et Windows) 🐧🪟
 
-Portage en Rust de csv2listes pour Linux. La version Windows d'origine (C++ / Win32) se trouve à la racine du dépôt.
+Portage en Rust de csv2listes, pour Linux et Windows. La version Windows d'origine (C++ / Win32) se trouve à la racine du dépôt.
 
 L'utilisation est la même : régler les étapes 1 et 2, ouvrir le fichier CSV, répondre aux questions, puis coller les listes avec Ctrl + V.
 
@@ -39,6 +39,26 @@ cargo test
 ```
 Les tests reprennent ceux de `tests/tests_csv2list.cpp` et utilisent les mêmes fichiers (`../tests/assets`). Les tests du presse-papiers ne sont pas repris : la copie passe par la fenêtre.
 
+## Compiler les versions de diffusion 🚀
+**Windows (depuis Fedora)** : installer une fois la chaîne de compilation MinGW, puis compiler.
+```bash
+sudo dnf install mingw64-gcc rust-std-static-x86_64-pc-windows-gnu
+cargo build --release --target x86_64-pc-windows-gnu
+```
+L'exécutable `target/x86_64-pc-windows-gnu/release/csv2listes.exe` fonctionne seul (aucune DLL à fournir) sous Windows 10 et 11 64 bits. L'icône et les informations de version y sont intégrées par `build.rs`.
+
+**Linux portable** : un binaire compilé sur une distribution récente exige une glibc récente. Pour qu'il fonctionne aussi sous Ubuntu 22.04, Debian 12 et Fedora 36 ou plus récent, compilez-le dans un conteneur Debian 12 :
+```bash
+podman run --rm --security-opt label=disable \
+  -v "$PWD/..":/src -w /src/rust \
+  -v "$HOME/.cargo/registry":/usr/local/cargo/registry \
+  -e CARGO_TARGET_DIR=/src/rust/target/portable \
+  docker.io/library/rust:1-bookworm cargo build --release --locked
+```
+Le binaire se trouve dans `target/portable/release/csv2listes`.
+
+La version de `Cargo.toml` (`0.0.9`) est affichée avec la numérotation à 4 chiffres de la version Windows d'origine (`0.0.0.9`).
+
 ## Organisation du code
 | Fichier | Rôle | Équivalent C++ |
 |---|---|---|
@@ -59,6 +79,7 @@ pub const MAX_SIZE_FILE: u64 = 1_000_000;
 ```
 
 ## Différences avec la version Windows
+- Une fenêtre « À propos » (lien en bas à droite, ou clic sur la barre d'état) indique la version, l'auteur et la licence.
 - Les fichiers en UTF-8 (avec ou sans BOM) et en Latin-1 sont acceptés, avec des fins de ligne Windows ou Linux.
 - Un délimiteur personnalisé vide affiche une erreur (la version C++ bouclait sans fin).
 - Si aucune ligne de données n'est choisie, une erreur s'affiche au lieu de listes vides.

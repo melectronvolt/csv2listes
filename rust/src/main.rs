@@ -1,5 +1,8 @@
 //! Interface graphique de csv2listes.
 
+// Pas de console au lancement sous Windows
+#![cfg_attr(windows, windows_subsystem = "windows")]
+
 mod logger;
 
 use std::path::{Path, PathBuf};
@@ -11,6 +14,8 @@ use eframe::egui;
 const APP_ID: &str = "csv2listes";
 const TITLE: &str = "Convertisseur : fichier CSV -> listes en Python";
 const COPYRIGHT: &str = "Rémi MEVAERE© 2024";
+/// Numérotation à 4 chiffres de la version Windows d'origine (0.0.9 dans Cargo → 0.0.0.9).
+const VERSION: &str = concat!("0.", env!("CARGO_PKG_VERSION"));
 const WEBSITE: &str = "https://sciences-physiques.net/softwares/csv2listes";
 const DESCRIPTION: &str = "\
 - Permet de convertir les colonnes d'un fichier CSV en listes pour Python ;
@@ -22,7 +27,7 @@ fn main() -> eframe::Result {
     if std::env::args().skip(1).any(|arg| matches!(arg.as_str(), "log" | "--log" | "debug")) {
         logger::init();
     }
-    log::info!("Démarrage du logiciel, version {}", env!("CARGO_PKG_VERSION"));
+    log::info!("Démarrage du logiciel, version {VERSION}");
     for (index, arg) in std::env::args().enumerate() {
         log::info!("Argument {index} : {arg}");
     }
@@ -61,7 +66,7 @@ enum Dialog {
         text: String,
         error: bool,
     },
-    OpenWebsite,
+    About,
 }
 
 impl Dialog {
@@ -76,7 +81,6 @@ impl Dialog {
 
 enum DialogAction {
     Answer(Answer),
-    OpenWebsite,
     Close,
 }
 
@@ -114,15 +118,19 @@ impl eframe::App for App {
         let ctx = ui.ctx().clone();
 
         egui::Panel::bottom("status_bar").show(ui, |ui| {
-            let status = format!("{COPYRIGHT} - {}", env!("CARGO_PKG_VERSION"));
-            let response = ui
-                .add(egui::Label::new(status).sense(egui::Sense::click()))
-                .on_hover_cursor(egui::CursorIcon::PointingHand)
-                .on_hover_text("Plus d'informations");
-            if response.clicked() {
-                log::info!("GUI : la barre de statut a été cliquée.");
-                self.dialog = Some(Dialog::OpenWebsite);
-            }
+            ui.horizontal(|ui| {
+                let status = ui
+                    .add(egui::Label::new(format!("{COPYRIGHT} - {VERSION}")).sense(egui::Sense::click()))
+                    .on_hover_cursor(egui::CursorIcon::PointingHand)
+                    .on_hover_text("Plus d'informations");
+                let about = ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
+                    ui.link("À propos")
+                });
+                if status.clicked() || about.inner.clicked() {
+                    log::info!("GUI : ouverture de « À propos ».");
+                    self.dialog = Some(Dialog::About);
+                }
+            });
         });
 
         egui::CentralPanel::default().show(ui, |ui| {
@@ -322,18 +330,18 @@ impl App {
                         action = Some(DialogAction::Close);
                     }
                 }
-                Dialog::OpenWebsite => {
-                    ui.heading("Plus d'informations");
-                    ui.label("Souhaitez-vous ouvrir sciences-physiques.net ?");
+                Dialog::About => {
+                    ui.heading("À propos");
+                    ui.label(egui::RichText::new(format!("csv2listes {VERSION}")).strong());
+                    ui.label(TITLE);
                     ui.add_space(4.0);
-                    ui.horizontal(|ui| {
-                        if dialog_button(ui, "Oui") {
-                            action = Some(DialogAction::OpenWebsite);
-                        }
-                        if dialog_button(ui, "Non") {
-                            action = Some(DialogAction::Close);
-                        }
-                    });
+                    ui.label(format!("Auteur : {}", env!("CARGO_PKG_AUTHORS")));
+                    ui.label(format!("{COPYRIGHT} - Licence {}", env!("CARGO_PKG_LICENSE")));
+                    ui.hyperlink_to("sciences-physiques.net", WEBSITE);
+                    ui.add_space(4.0);
+                    if dialog_button(ui, "Fermer") {
+                        action = Some(DialogAction::Close);
+                    }
                 }
             }
         });
@@ -349,8 +357,7 @@ impl App {
             action = match dialog {
                 Dialog::Question(_) if enter => Some(DialogAction::Answer(Answer::Yes)),
                 Dialog::Question(_) if escape => Some(DialogAction::Answer(Answer::Cancel)),
-                Dialog::OpenWebsite if enter => Some(DialogAction::OpenWebsite),
-                Dialog::OpenWebsite | Dialog::Message { .. } if enter || escape => Some(DialogAction::Close),
+                Dialog::About | Dialog::Message { .. } if enter || escape => Some(DialogAction::Close),
                 _ => None,
             };
         }
@@ -362,11 +369,6 @@ impl App {
                     let step = extraction.answer(answer);
                     self.handle_step(step, ctx);
                 }
-            }
-            Some(DialogAction::OpenWebsite) => {
-                self.dialog = None;
-                log::debug!("Ouverture de {WEBSITE}");
-                ctx.open_url(egui::OpenUrl::new_tab(WEBSITE));
             }
             Some(DialogAction::Close) => self.dialog = None,
             None => {}
